@@ -129,7 +129,7 @@ function start () {
     }
 }
 
-start();
+//start();
 
 let personalMoviesDB = {
     count: numberOfFilms, 
@@ -139,39 +139,7 @@ let personalMoviesDB = {
     privat: false
 };
 
-function rememberMyFilms() {
-    for (let i = 0; i < 2; i++) {
-        let lastFilm = prompt('What was u last film?', ''),
-            rate     = prompt('how do u rate it?', '');
-    
-        if (lastFilm != null && rate != null && lastFilm != '' && rate != '' && lastFilm.length < 50) {
-            personalMoviesDB.movies[lastFilm] = rate; 
-            console.log('done');
-        }else{
-            console.log('error');
-            i--;
-        }
-    
-    }
-}
 
-rememberMyFilms();
-
-function detectPersonalLevel () {
-    if (personalMoviesDB.count < 10) {
-        console.log('too moderate quantity of films');
-    } else if (personalMoviesDB.count >= 10 && personalMoviesDB.count < 30){
-        console.log ('You are a classic viewer');
-    } else if (personalMoviesDB.count >= 30) {
-        console.log ('U are a big fun of movies');
-    } else{
-        console.log('error');
-    }
-}
-detectPersonalLevel ();
-
-/* 2) Create a function showMyDB, will check the privat property. If standing in position
-false - displays the main program object to the console */
 
 function showMyDB (hidden) {
     if (!hidden) {
@@ -179,7 +147,18 @@ function showMyDB (hidden) {
     }
 }
 
-showMyDB(personalMoviesDB.privat);
+showMyDB(personalMoviesDB.privat); // эта херня передает false из базы данных
+
+          // option 2
+          
+/* function showMyDB() {
+    if (personalMoviesDB.privat != true) {
+        console.log(personalMoviesDB);
+    }else{
+        console.log('Privat');
+    }
+}
+showMyDB(); */
 
 
 /* 3) Create a writeYourGenres function, in which the user will answer the question 3 times
