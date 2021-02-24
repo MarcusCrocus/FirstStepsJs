@@ -2,22 +2,19 @@
 
 let numberOfFilms;
 
-function start() {
-    numberOfFilms = +prompt('сколько фильмо вы уже посмотрели', '');
-
-    while (numberOfFilms == 'null' || numberOfFilms == '' || isNaN(numberOfFilms)) {
-        numberOfFilms = +prompt('сколько фильмо вы уже посмотрели', '');
-    }
-}
-
-start();
-
 const personalMoviesDB = {
     count: numberOfFilms,
     movies: {},
     actors: {},
     genders: [],
-    privat: false
+    private: false
+    start: function() {
+        numberOfFilms = +prompt('how many movies have you watched', '');
+    
+        while (numberOfFilms == 'null' || numberOfFilms == '' || isNaN(numberOfFilms)) {
+            numberOfFilms = +prompt('how many films you have already looked', '');
+        }
+    }
 };
 
 function rememberMyFilms() {
@@ -61,10 +58,10 @@ console.log(personalMoviesDB);
 
 
 function showMyDB() {
-    if (personalMoviesDB.privat != true) {
+    if (personalMoviesDB.private != true) {
         console.log(personalMoviesDB);
     }else{
-        console.log('Privat');
+        console.log('Private');
     }
 }
 showMyDB();
@@ -78,3 +75,4 @@ function writeYourGenres() {
     }
 }
 writeYourGenres();
+
