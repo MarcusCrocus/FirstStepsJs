@@ -1,4 +1,4 @@
-/* Задание на урок:
+/*  Задание на урок:
 
 1) Создать переменную numberOfFilms и в неё поместить ответ от пользователя на вопрос:
 'Сколько фильмов вы уже посмотрели?'
@@ -19,4 +19,25 @@
         'logan': '8.1'
     }
 
-Проверить, чтобы все работало без ошибок в консоли */
+Проверить, чтобы все работало без ошибок в консоли  */
+
+'use strict';
+const numberOfFilms = prompt('How many films have u watched?', '');
+
+const personalMovieDB = {
+    count: numberOfFilms, 
+    movies: {},
+    actors: {},
+    genders: [],
+    private: false
+};
+
+const lastFilm = prompt('What was u last film?', ''),
+      rate     = prompt('how do u rate it?', ''),
+      b        = prompt('What was u last film?', ''),
+      c        = prompt('how do u rate it?', '');
+
+personalMovieDB.movies[lastFilm] = rate;
+personalMovieDB.movies[b] = c;                           //в квадратных во избежание багов с кирилицей
+
+    //! не использовать через точку personalMovieDB.movies.lastFilm = rate; 
