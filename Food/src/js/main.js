@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-/*     function showTabContent (i) {            //?нужно знать к какому элементу мы обращаемся поэтому передаем аргумент (i)
+    /* function showTabContent (i) {            //?нужно знать к какому элементу мы обращаемся поэтому передаем аргумент (i)
         tabContent[i].style.display = 'block';
         tabs[i].classList.add('tabheader__item_active');
     } */
@@ -123,16 +123,30 @@ window.addEventListener('DOMContentLoaded', () => {
     const modalTrigger = document.querySelector('[data-modal]'),
           modal = document.querySelector('.modal'),
           modalCloseBtn = document.querySelector('[data-close]');
-    
-        modalTrigger.addEventListener('click', () => {
-        modal.classList.add('show');
-        modal.classList.remove('hide');
-    });
 
-        modalCloseBtn.addEventListener('click', () => {
+    /*modalTrigger.addEventListener('click', () => {
+            modal.classList.add('show');
+            modal.classList.remove('hide');
+            document.body.style.overflow = 'hidden'; // позволяет зафиксировать стр при открытии .modal (scrollOFF)
+        });
+
+    modalCloseBtn.addEventListener('click', () => {
         modal.classList.add('hide');
         modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }); */
+
+    //? вариант решения задичи с toggle 
+    //? изначально <div class="modal"> добавляем клас hide
+
+    modalTrigger.addEventListener('click', () => {
+        modal.classList.toggle('show');
+        document.body.style.overflow = 'hidden';
     });
-    
+
+    modalCloseBtn.addEventListener('click', () => {
+        modal.classList.toggle('show');
+        document.body.style.overflow = '';
+    });
 
 });
