@@ -4,11 +4,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
    const tabs       = document.querySelectorAll('.tabheader__item'),
          tabsContent = document.querySelectorAll('.tabcontent'),
-         tabsParent = document.querySelector('.tabheader__item');
+         tabsParent = document.querySelector('.tabheader__items');
     
     function hideTabContent() {
         tabsContent.forEach(item => {
-            item.style.display = 'none';
+           //// item.style.display = 'none'; //? заменяем inline стили
+            //*классы дописаны в _preview.scss
+
+           item.classList.add('hide');
+           item.classList.remove('show', 'fade');
         });
 
             //*уберем класс активности у табов
@@ -24,8 +28,12 @@ window.addEventListener('DOMContentLoaded', () => {
     } */
 
     function showTabContent (i = 0) {           
-        tabsContent[i].style.display = 'block';
-        tabs[i].classList.add('tabheader__item_active');
+        ////tabsContent[i].style.display = 'block';            //? заменяем inline стили
+        tabsContent[i].classList.add('show', 'fade');
+        tabsContent[i].classList.remove('hide');
+        tabs[i].classList.add('tabheader__item_active');   
+
+
     }
 
     hideTabContent();
