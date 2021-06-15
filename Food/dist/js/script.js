@@ -203,7 +203,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setClock('.timer', deadLine); //todo Modal window
   //? добавляем attribute "data-modal" к "связаться с нами" & data-close
 
-  const modalTrigger = document.querySelector('[data-modal]'),
+  const modalTrigger = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector('.modal'),
         modalCloseBtn = document.querySelector('[data-close]');
   /*modalTrigger.addEventListener('click', () => {
@@ -219,13 +219,37 @@ window.addEventListener('DOMContentLoaded', () => {
   //? вариант решения задичи с toggle 
   //? изначально <div class="modal"> добавляем клас hide
 
-  modalTrigger.addEventListener('click', () => {
-    modal.classList.toggle('show');
-    document.body.style.overflow = 'hidden';
-  });
-  modalCloseBtn.addEventListener('click', () => {
+  modalTrigger.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.classList.toggle('show');
+      document.body.style.overflow = 'hidden';
+    });
+  }); //! если ваш код повторяется, то есть смысл вынести данные строки в отдельную функцию 
+
+  function closeModal() {
     modal.classList.toggle('show');
     document.body.style.overflow = '';
+  }
+  /*modalCloseBtn.addEventListener('click', () => {
+      modal.classList.toggle('show');
+      document.body.style.overflow = '';
+  }); */
+
+
+  modalCloseBtn.addEventListener('click', closeModal); //todo закрытие modal по клику вне области modal
+
+  modal.addEventListener('click', e => {
+    if (e.target === modal) {
+      /*modal.classList.toggle('show');
+      document.body.style.overflow = ''; */
+      closeModal();
+    }
+  }); //todo закрытие modal по нажатию ESC
+
+  document.addEventListener('keydown', e => {
+    if (e.code === "Escape" && modal.classList.contains('show')) {
+      closeModal();
+    }
   });
 });
 
