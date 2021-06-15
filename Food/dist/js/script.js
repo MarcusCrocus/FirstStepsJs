@@ -218,13 +218,22 @@ window.addEventListener('DOMContentLoaded', () => {
       }); */
   //? вариант решения задичи с toggle 
   //? изначально <div class="modal"> изначально у нас .modal display: none
+  //! ЕСЛИ ВАШ КОД ПОВТОРЯЕТСЯ, ТО ЕСТЬ СМЫСЛ ВЫНЕСТИ ДАННЫЕ СТРОКИ В ОТДЕЛЬНУЮ ФУНКЦИЮ
+
+  function openModal() {
+    modal.classList.toggle('show');
+    document.body.style.overflow = 'hidden'; // позволяет зафиксировать стр при открытии .modal (scrollOFF)
+
+    clearInterval(modalTimerID); // если пользователь сам открыл modal то интервал открытия сбростся
+  }
 
   modalTrigger.forEach(btn => {
-    btn.addEventListener('click', () => {
-      modal.classList.toggle('show');
-      document.body.style.overflow = 'hidden'; // позволяет зафиксировать стр при открытии .modal (scrollOFF)
-    });
-  }); //! ЕСЛИ ВАШ КОД ПОВТОРЯЕТСЯ, ТО ЕСТЬ СМЫСЛ ВЫНЕСТИ ДАННЫЕ СТРОКИ В ОТДЕЛЬНУЮ ФУНКЦИЮ
+    btn.addEventListener('click', openModal);
+    /* () => {
+    modal.classList.toggle('show');
+    document.body.style.overflow = 'hidden'; // позволяет зафиксировать стр при открытии .modal (scrollOFF)
+    }); */
+  });
 
   function closeModal() {
     modal.classList.toggle('show');
@@ -252,7 +261,23 @@ window.addEventListener('DOMContentLoaded', () => {
       // что бы esc срабатовал когда есть класс show
       closeModal();
     }
-  });
+  }); //todo modal появляется когда пользователь долистал стр до конца либо чере опред промежуток времени
+
+  const modalTimerID = setTimeout(openModal, 5000); // todo если пользователь долистал страницу до конца то выскочит модалка
+
+  function showModalByScroll() {
+    if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+      openModal();
+      window.removeEventListener('scroll', showModalByScroll);
+    }
+  }
+
+  window.addEventListener('scroll', showModalByScroll);
+  /*  () => {
+      if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+          openModal();
+      }
+  },  {once: true} ); */
 });
 
 /***/ })
