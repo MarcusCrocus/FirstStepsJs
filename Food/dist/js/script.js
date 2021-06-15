@@ -206,48 +206,50 @@ window.addEventListener('DOMContentLoaded', () => {
   const modalTrigger = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector('.modal'),
         modalCloseBtn = document.querySelector('[data-close]');
-  /*modalTrigger.addEventListener('click', () => {
+  /*     modalTrigger.addEventListener('click', () => {
           modal.classList.add('show');
           modal.classList.remove('hide');
           document.body.style.overflow = 'hidden'; // позволяет зафиксировать стр при открытии .modal (scrollOFF)
-      });
-    modalCloseBtn.addEventListener('click', () => {
-      modal.classList.add('hide');
-      modal.classList.remove('show');
-      document.body.style.overflow = '';
-  }); */
+      }); 
+        modalCloseBtn.addEventListener('click', () => {
+          modal.classList.add('hide');
+          modal.classList.remove('show');
+          document.body.style.overflow = ''; 
+      }); */
   //? вариант решения задичи с toggle 
-  //? изначально <div class="modal"> добавляем клас hide
+  //? изначально <div class="modal"> изначально у нас .modal display: none
 
   modalTrigger.forEach(btn => {
     btn.addEventListener('click', () => {
       modal.classList.toggle('show');
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; // позволяет зафиксировать стр при открытии .modal (scrollOFF)
     });
-  }); //! если ваш код повторяется, то есть смысл вынести данные строки в отдельную функцию 
+  }); //! ЕСЛИ ВАШ КОД ПОВТОРЯЕТСЯ, ТО ЕСТЬ СМЫСЛ ВЫНЕСТИ ДАННЫЕ СТРОКИ В ОТДЕЛЬНУЮ ФУНКЦИЮ
 
   function closeModal() {
     modal.classList.toggle('show');
     document.body.style.overflow = '';
   }
-  /*modalCloseBtn.addEventListener('click', () => {
-      modal.classList.toggle('show');
-      document.body.style.overflow = '';
+
+  modalCloseBtn.addEventListener('click', closeModal);
+  /* () => {
+  modal.classList.toggle('show');
+  document.body.style.overflow = ''; 
   }); */
-
-
-  modalCloseBtn.addEventListener('click', closeModal); //todo закрытие modal по клику вне области modal
+  //! ЕСЛИ ВАШ КОД ПОВТОРЯЕТСЯ, ТО ЕСТЬ СМЫСЛ ВЫНЕСТИ ДАННЫЕ СТРОКИ В ОТДЕЛЬНУЮ ФУНКЦИЮ 
+  //todo закрытие modal по клику вне области modal
 
   modal.addEventListener('click', e => {
     if (e.target === modal) {
-      /*modal.classList.toggle('show');
-      document.body.style.overflow = ''; */
+      /* modal.classList.toggle('show');
+      document.body.style.overflow = '';  */
       closeModal();
     }
-  }); //todo закрытие modal по нажатию ESC
+  }); //todo закрытие modal по нажатию ESC https://keycode.info/
 
   document.addEventListener('keydown', e => {
     if (e.code === "Escape" && modal.classList.contains('show')) {
+      // что бы esc срабатовал когда есть класс show
       closeModal();
     }
   });
