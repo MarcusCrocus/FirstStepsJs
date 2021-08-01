@@ -352,9 +352,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const forms = document.querySelectorAll('form');
   const message = {
-    loading: 'загрузка...',
-    success: 'сп мы с вами свяжемся',
-    failure: 'чтото пошло не так...'
+    loading: 'img/form/spinner.svg',
+    success: 'Спасибо! Скоро мы с вами свяжемся',
+    failure: 'Что-то пошло не так...'
   };
   forms.forEach(item => {
     postData(item);
@@ -364,10 +364,16 @@ window.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', e => {
       e.preventDefault(); // отмена стандартного поведения перезагрузки браузера при клик отправка
 
-      const statusMessage = document.createElement('div');
-      statusMessage.classList.add('status');
-      statusMessage.textContent = message.loading;
-      form.append(statusMessage);
+      const statusMessage = document.createElement('img'); //statusMessage.classList.add('status'); такого статуса нет
+
+      statusMessage.src = message.loading; //statusMessage.textContent = message.loading;
+
+      statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `; //form.append(statusMessage);
+
+      form.insertAdjacentElement('afterend', statusMessage);
       const request = new XMLHttpRequest();
       request.open('POST', 'server.php'); // данный которые введет пользователь в форму получить в js.script и отправить на сервер
       //? #Способ №1 formData (простая отправка данных)
@@ -390,7 +396,7 @@ window.addEventListener('DOMContentLoaded', () => {
          }); */
       //? #Способ №2 formData ( отправка данных в формате JSON)
 
-      request.setRequestHeader('Contente-type', 'application/json');
+      request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
       const formData = new FormData(form);
       const object = {};
       formData.forEach(function (value, key) {
@@ -402,8 +408,8 @@ window.addEventListener('DOMContentLoaded', () => {
         if (request.status === 200) {
           console.log(request.response);
           showThanksModal(message.success);
-          form.reset();
           statusMessage.remove();
+          form.reset();
         } else {
           showThanksModal(message.failure);
         }
