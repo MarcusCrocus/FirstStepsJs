@@ -211,7 +211,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const modalTrigger = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector('.modal');
   /* modalCloseBtn = document.querySelector('[data-close]'); */
-  //!! lesson №53 создается динамический элемент <div class="modal__close" data-close>×</div> поэтому обработчик событий уже не повесить = использовать делегирование
+  //!! lesson №54 создается динамический элемент <div class="modal__close" data-close>×</div> поэтому обработчик событий уже не повесить = использовать делегирование
 
   /*     modalTrigger.addEventListener('click', () => {
           modal.classList.add('show');
@@ -247,7 +247,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = '';
   }
   /*  modalCloseBtn.addEventListener('click', closeModal); */
-  //!! lesson 53 <div class="modal__close" data-close>×</div> поэтому обработчик событий уже не повесить = использовать делегирование
+  //!! lesson 54 <div class="modal__close" data-close>×</div> поэтому обработчик событий уже не повесить = использовать делегирование
 
   /* () => {
   modal.classList.toggle('show');
@@ -273,7 +273,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }); //todo modal появляется когда пользователь долистал стр до конца либо чере опред промежуток времени
 
-  const modalTimerID = setTimeout(openModal, 5000); // todo если пользователь долистал страницу до конца то выскочит модалка
+  const modalTimerID = setTimeout(openModal, 50000); // todo если пользователь долистал страницу до конца то выскочит модалка
 
   function showModalByScroll() {
     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -401,13 +401,11 @@ window.addEventListener('DOMContentLoaded', () => {
       request.addEventListener('load', () => {
         if (request.status === 200) {
           console.log(request.response);
-          statusMessage.textContent = message.success;
+          showThanksModal(message.success);
           form.reset();
-          setTimeout(() => {
-            statusMessage.remove();
-          }, 2000);
+          statusMessage.remove();
         } else {
-          statusMessage.textContent = message.failure;
+          showThanksModal(message.failure);
         }
       });
     });
@@ -421,7 +419,7 @@ window.addEventListener('DOMContentLoaded', () => {
     openModal(); // создание контента
 
     const thanksModal = document.createElement('div');
-    thanksModal.classList.add('.modal__dialog');
+    thanksModal.classList.add('modal__dialog');
     thanksModal.innerHTML = `
             <div class="modal__content">
                 <div class="modal__close" data-close>×</div>
@@ -432,7 +430,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       thanksModal.remove();
       prevModalDialog.classList.add('show');
-      prevModalDialog.classList.add('hide');
+      prevModalDialog.classList.remove('hide');
       closeModal();
     }, 4000);
   }
