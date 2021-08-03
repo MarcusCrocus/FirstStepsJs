@@ -284,8 +284,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
     //58 работа с базой данных
 
-    fetch('db.json')
+    fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res));
 
-});
+        //! json-server db.json не сработало в терменале
+
+            //https://stackoverflow.com/questions/55547572/json-server-is-not-recognized-as-an-internal-or-external-command
+        //!!  npx json-server db.json
+})
