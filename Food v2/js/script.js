@@ -1,13 +1,15 @@
-window.addEventListener('DOMContentLoaded', function() {
+"use strict";
+
+window.addEventListener('DOMContentLoaded', function () {
 
     // Tabs
-    
-	let tabs = document.querySelectorAll('.tabheader__item'),
-		tabsContent = document.querySelectorAll('.tabcontent'),
-		tabsParent = document.querySelector('.tabheader__items');
 
-	function hideTabContent() {
-        
+    let tabs = document.querySelectorAll('.tabheader__item'),
+        tabsContent = document.querySelectorAll('.tabcontent'),
+        tabsParent = document.querySelector('.tabheader__items');
+
+    function hideTabContent() {
+
         tabsContent.forEach(item => {
             item.classList.add('hide');
             item.classList.remove('show', 'fade');
@@ -16,39 +18,39 @@ window.addEventListener('DOMContentLoaded', function() {
         tabs.forEach(item => {
             item.classList.remove('tabheader__item_active');
         });
-	}
+    }
 
-	function showTabContent(i = 0) {
+    function showTabContent(i = 0) {
         tabsContent[i].classList.add('show', 'fade');
         tabsContent[i].classList.remove('hide');
         tabs[i].classList.add('tabheader__item_active');
     }
-    
+
     hideTabContent();
     showTabContent();
 
-	tabsParent.addEventListener('click', function(event) {
-		const target = event.target;
-		if(target && target.classList.contains('tabheader__item')) {
+    tabsParent.addEventListener('click', function (event) {
+        const target = event.target;
+        if (target && target.classList.contains('tabheader__item')) {
             tabs.forEach((item, i) => {
                 if (target == item) {
                     hideTabContent();
                     showTabContent(i);
                 }
             });
-		}
+        }
     });
-    
+
     // Timer
 
     const deadline = '2020-05-11';
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
-            days = Math.floor( (t/(1000*60*60*24)) ),
-            seconds = Math.floor( (t/1000) % 60 ),
-            minutes = Math.floor( (t/1000/60) % 60 ),
-            hours = Math.floor( (t/(1000*60*60) % 24) );
+            days = Math.floor((t / (1000 * 60 * 60 * 24))),
+            seconds = Math.floor((t / 1000) % 60),
+            minutes = Math.floor((t / 1000 / 60) % 60),
+            hours = Math.floor((t / (1000 * 60 * 60) % 24));
 
         return {
             'total': t,
@@ -59,8 +61,8 @@ window.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    function getZero(num){
-        if (num >= 0 && num < 10) { 
+    function getZero(num) {
+        if (num >= 0 && num < 10) {
             return '0' + num;
         } else {
             return num;
@@ -123,7 +125,7 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.code === "Escape" && modal.classList.contains('show')) { 
+        if (e.code === "Escape" && modal.classList.contains('show')) {
             closeModal();
         }
     });
@@ -151,11 +153,11 @@ window.addEventListener('DOMContentLoaded', function() {
             this.classes = classes;
             this.parent = document.querySelector(parentSelector);
             this.transfer = 27;
-            this.changeToUAH(); 
+            this.changeToUAH();
         }
 
         changeToUAH() {
-            this.price = this.price * this.transfer; 
+            this.price = this.price * this.transfer;
         }
 
         render() {
@@ -194,32 +196,38 @@ window.addEventListener('DOMContentLoaded', function() {
 
     getResources('http://localhost:3000/menu')
         .then(data => {
-            data.forEach(({img, altimg,title, descr, price}) => {
-                new MenuCard(img, altimg,title, descr, price, '.menu .container').render();
+            data.forEach(({
+                img,
+                altimg,
+                title,
+                descr,
+                price
+            }) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
             });
         });
 
-        /* getResources('http://localhost:3000/menu')
-        .then(data => createCard(data));
+    /* getResources('http://localhost:3000/menu')
+    .then(data => createCard(data));
 
-         function createCard(data) {
-            data.forEach(({img, altimg,title, descr, price}) => {
-                const element = document.createElement('div');
+     function createCard(data) {
+        data.forEach(({img, altimg,title, descr, price}) => {
+            const element = document.createElement('div');
 
-                element.classList.add('menu__item');
+            element.classList.add('menu__item');
 
-                element.innerHTML = `
-                <img src=${img} alt=${altimg}>
-                <h3 class="menu__item-subtitle">${title}</h3>
-                <div class="menu__item-descr">${descr}</div>
-                <div class="menu__item-divider"></div>
-                <div class="menu__item-price">
-                    <div class="menu__item-cost">Цена:</div>
-                    <div class="menu__item-total"><span>${price}</span> грн/день</div>
-                </div>
-            `;
-            document.querySelector('.menu. container').append(element);
-        });  */
+            element.innerHTML = `
+            <img src=${img} alt=${altimg}>
+            <h3 class="menu__item-subtitle">${title}</h3>
+            <div class="menu__item-descr">${descr}</div>
+            <div class="menu__item-divider"></div>
+            <div class="menu__item-price">
+                <div class="menu__item-cost">Цена:</div>
+                <div class="menu__item-total"><span>${price}</span> грн/день</div>
+            </div>
+        `;
+        document.querySelector('.menu. container').append(element);
+    });  */
 
     // Forms
 
@@ -257,22 +265,27 @@ window.addEventListener('DOMContentLoaded', function() {
                 margin: 0 auto;
             `;
             form.insertAdjacentElement('afterend', statusMessage);
-        
+
             const formData = new FormData(form);
+
+            /* const object = {};
+            formData.forEach(function(value, key){
+                object[key] = value;
+            }) */
 
             const json = JSON.stringify(Object.fromEntries(formData.entries())); // делаем массив в массиве дописываем Object.fromEntries получаем объект
 
             postData('http://localhost:3000/requests', json)
-            
-            .then(data => {
-                console.log(data);
-                showThanksModal(message.success);
-                statusMessage.remove();
-            }).catch(() => {
-                showThanksModal(message.failure);
-            }).finally(() => {
-                form.reset();
-            });
+
+                .then(data => {
+                    console.log(data);
+                    showThanksModal(message.success);
+                    statusMessage.remove();
+                }).catch(() => {
+                    showThanksModal(message.failure);
+                }).finally(() => {
+                    form.reset();
+                });
         });
     }
 
@@ -301,12 +314,50 @@ window.addEventListener('DOMContentLoaded', function() {
 
     //58 работа с базой данных
 
-    fetch('http://localhost:3000/menu')
+    /* fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res));
 
         //! json-server db.json не сработало в терменале
 
             //https://stackoverflow.com/questions/55547572/json-server-is-not-recognized-as-an-internal-or-external-command
-        //!!  npx json-server db.json - необходимо что бы json сервер и openserver оба работали 
+        //!!  npx json-server db.json - необходимо что бы json сервер и openserver оба работали  */
+
+    //TODO lesson 61 
+
+
+    const slides = document.querySelectorAll('.offer__slide'),
+        prev = document.querySelector('.offer__slider-prev'),
+        next = document.querySelector('.offer__slider-next');
+
+    let slideIndex = 1; //индекс который определяет текущее положение в слайдере (let потомучто будет изменяться)
+
+    showSlides(slideIndex); //! что бы все заработало не зыбываем про инициализацию
+
+    function showSlides(n) {
+        if (n > slides.length) { // если ушли в правую границу то, 
+            slideIndex = 1; //при клике возвращаемся к первому слайду
+        }
+        if (n < 1) { // если в отрицательную сторону то, 
+            slideIndex = slides.length; // возвращаем к последнему имеющемуся
+        }
+
+        slides.forEach(item => item.style.display = 'none'); //скрываем все слайды
+
+        slides[slideIndex - 1].item.style.display = 'block'; // показываем нужный
+
+    }
+    //* функционал по изменению индекса слайда при их перелистывании 
+    function pulusSlides(n) {
+        showSlides(slideIndex += n)
+    }
+
+    prev.addEventListener('click', () => {
+        pulusSlides(-1);
+    });
+
+    next.addEventListener('click', () => {
+        pulusSlides(+1);
+    });
+
 });
