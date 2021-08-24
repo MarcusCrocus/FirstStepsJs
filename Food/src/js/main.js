@@ -278,6 +278,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // new MenuCard().render();
 
+
+    //todo lesson 59 настройка GET
+
+
+
     new MenuCard(
         "img/tabs/vegy.jpg",
         "vegy",
@@ -608,8 +613,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //? отправка данных в формате JSON
     //! раскоментировать $_POST = json_decode(file_get_contents("php://input"), true);
-
-    const forms = document.querySelectorAll('form');
+ 
+/*     const forms = document.querySelectorAll('form');
 
     const message = {
        loading: 'img/form/spinner.svg',
@@ -617,11 +622,11 @@ window.addEventListener('DOMContentLoaded', () => {
        failure: 'Что-то пошло не так...'
    };
 
-   forms.forEach(item => {
+    forms.forEach(item => {
        postData(item);
-   });
+   }); 
 
-   function postData(form) {
+    function postData(form) {
        form.addEventListener('submit', (e) => {
            e.preventDefault(); // отмена стандартного поведения перезагрузки браузера при клик отправка
 
@@ -664,7 +669,122 @@ window.addEventListener('DOMContentLoaded', () => {
                form.reset();
            });
        });
-   }
+   } 
+
+     function showThanksModal(message) {
+       const prevModalDialog = document.querySelector('.modal__dialog');
+
+       // скрываем элемент
+       prevModalDialog.classList.add('hide');
+       openModal();
+
+       // создание контента
+       const thanksModal = document.createElement('div');
+       thanksModal.classList.add('modal__dialog');
+       thanksModal.innerHTML = `
+           <div class="modal__content">
+               <div class="modal__close" data-close>×</div>
+               <div class="modal__title">${message}</div>
+           </div>
+       `;
+       document.querySelector('.modal').append(thanksModal);
+       setTimeout(() => {
+           thanksModal.remove();
+           prevModalDialog.classList.add('show');
+           prevModalDialog.classList.remove('hide');
+           closeModal();
+       }, 4000);
+   }  */
+
+   // todo lesson 58 adding db.json file
+     //? получим доступ к базе данных
+
+   fetch('db.json')
+        .then(data => data.json())
+        .then(res => console.log(res));
+
+   //? в консоле должен появиться ОБЪЕКТ с данными из базы данных
+   //? запускаем json-server для того что бы иметь возможность POST дата в базу данных (request)*/
+
+   //!!  npx json-server db.json - необходимо что бы json сервер и openserver оба работали  */ 
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res => console.log(res));
+    //? в консоле должен появиться МАССИВ с данными из базы данных который содержит объекты
+
+     //todo lesson 59 заменяем данный карточек menuCard на данные которые будут подхватываться из db.json
+    // ? 1 выносим функционал общения с сервером в отдельную функцию(ВСЕГДА РЕКОМЕНДУЕТСЯ) POST в db.jso
+
+    const forms = document.querySelectorAll('form');
+
+    const message = {
+       loading: 'img/form/spinner.svg',
+       success: 'Спасибо! Скоро мы с вами свяжемся',
+       failure: 'Что-то пошло не так...'
+    };
+
+    forms.forEach(item => {
+        bindPostData(item);
+    });
+
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: data
+        });
+
+        return await res.json(); //возвращаем Promise что бы обработать через цепочку then
+
+    };
+
+    function bindPostData(form) {
+        form.addEventListener('submit', (e) => {
+           e.preventDefault(); // отмена стандартного поведения перезагрузки браузера при клик отправка
+
+            const statusMessage = document.createElement('img');
+            statusMessage.src = message.loading;
+            statusMessage.textContent = message.loading;
+            statusMessage.style.cssText = `
+               display: block;
+               margin: 0 auto;
+           `; // css inline styles
+           
+            form.insertAdjacentElement('afterend', statusMessage); //append spiner после формы
+
+           const formData = new FormData(form);
+
+           // трансформация formData в массив-массивом потом в объект, а потом в json
+           
+            //  const json = JSON.stringify(Object.fromEntries(formData.entries()));
+
+             //? пример как работает Object.entries 
+/*                 const obj = {a: 23, b: 44};
+                console.log(Object.entries(obj)); */ 
+
+/*                 const object = {};
+                formData.forEach(function(value, key){
+                    object[key] = value;
+                }); */ 
+            
+            //postData('http://localhost:3000/requests', json)
+                postData('http://localhost:3000/requests', JSON.stringify(object))
+                .then(data => {
+                    console.log(data); // данные из промиса которые вернул сервер
+                    showThanksModal(message.success);
+                    form.reset();
+                    statusMessage.remove();
+                })
+                .catch(() => {
+                    showThanksModal(message.failure);
+                })
+                .finally(() => {
+                    form.reset();
+                });
+        });
+    }
 
     function showThanksModal(message) {
        const prevModalDialog = document.querySelector('.modal__dialog');
@@ -691,11 +811,10 @@ window.addEventListener('DOMContentLoaded', () => {
        }, 4000);
    }
 
-
     //TODO lesson 61 
 
 
-    /* const slides = document.querySelectorAll('.offer__slide'),
+/*     const slides = document.querySelectorAll('.offer__slide'),
         prev = document.querySelector('.offer__slider-prev'),
         next = document.querySelector('.offer__slider-next');
 
@@ -727,7 +846,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     next.addEventListener('click', () => {
         pulusSlides(+1);
-    });*/
+    }); */
 
 
 
