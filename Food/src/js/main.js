@@ -712,7 +712,7 @@ window.addEventListener('DOMContentLoaded', () => {
         .then(res => console.log(res));
     //? в консоле должен появиться МАССИВ с данными из базы данных который содержит объекты
 
-     //todo lesson 59 заменяем данный карточек menuCard на данные которые будут подхватываться из db.json
+     //todo lesson 59 заменяем данный карточек menuCard на данные которые будут подхватываться из db.json 16,25 min
     // ? 1 выносим функционал общения с сервером в отдельную функцию(ВСЕГДА РЕКОМЕНДУЕТСЯ) POST в db.jso
 
     const forms = document.querySelectorAll('form');
@@ -756,20 +756,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
            const formData = new FormData(form);
 
-           // трансформация formData в массив-массивом потом в объект, а потом в json
+           //? трансформация formData в массив-массивом потом в объект, а потом в json
            
-            //  const json = JSON.stringify(Object.fromEntries(formData.entries()));
+            //  const json = JSON.stringify(Object.fromEntries(formData.entries())); //! не работает вместе
 
              //? пример как работает Object.entries 
 /*                 const obj = {a: 23, b: 44};
                 console.log(Object.entries(obj)); */ 
 
-/*                 const object = {};
+                const object = {};
                 formData.forEach(function(value, key){
                     object[key] = value;
-                }); */ 
+                }); 
             
-            //postData('http://localhost:3000/requests', json)
+            //postData('http://localhost:3000/requests', json) //! не работает вместе
                 postData('http://localhost:3000/requests', JSON.stringify(object))
                 .then(data => {
                     console.log(data); // данные из промиса которые вернул сервер
