@@ -2326,19 +2326,14 @@ window.addEventListener('DOMContentLoaded', () => {
   //todo lesson 59 настройка GET
   //? избавляемся от карточек
 
-
-  GetResource('http://localhost:3000/menu').then(data => {
-    //? деструктуризация через перебор для создания списка
-    data.forEach(({
-      img,
-      altimg,
-      title,
-      descr,
-      price
-    }) => {
-      new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
-    });
-  }); // Вариант 2 лишенный шаблонизации(создание верстки на лету без использования классов)
+  /*     GetResource('http://localhost:3000/menu')
+          .then(data => {
+              //? деструктуризация через перебор для создания списка
+              data.forEach(({img, altimg, title, descr, price}) => {
+                  new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+              });
+          }); */
+  // Вариант 2 лишенный шаблонизации(создание верстки на лету без использования классов)
 
   /* getResources('http://localhost:3000/menu')
       .then(data => createCard(data));
@@ -2360,7 +2355,21 @@ window.addEventListener('DOMContentLoaded', () => {
       `;
         document.querySelector('.menu. container').append(element);
   }     */
-  // todo lesson 53 Forms при помощи XMLHttprequest (устаревший метод) два метода отправки FormData and JSON
+  // todo lesson 60 AXIOS Library https://github.com/axios/axios
+
+
+  axios.get('http://localhost:3000/menu').then(data => {
+    //? деструктуризация через перебор для создания списка
+    data.data.forEach(({
+      img,
+      altimg,
+      title,
+      descr,
+      price
+    }) => {
+      new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+    });
+  }); // todo lesson 53 Forms при помощи XMLHttprequest (устаревший метод) два метода отправки FormData and JSON
   //? #1 FormData (работает с php)
 
   /*     const forms = document.querySelectorAll('form');
@@ -2744,8 +2753,10 @@ window.addEventListener('DOMContentLoaded', () => {
   //? запускаем json-server для того что бы иметь возможность POST дата в базу данных (request)*/
   //!!  npx json-server db.json - необходимо что бы json сервер и openserver оба работали  */ 
 
-  fetch('http://localhost:3000/menu').then(data => data.json()) //! для визуального сравнения либо это либо это в dev.tools подвязываем open server для пост запроссов
-  .then(res => console.log(res)); //? в консоле должен появиться МАССИВ с данными из базы данных который содержит объекты
+  /*     fetch('http://localhost:3000/menu')
+          .then(data => data.json())                        //! для визуального сравнения либо это либо это в dev.tools подвязываем open server для пост запроссов
+          .then(res => console.log(res)); */
+  //? в консоле должен появиться МАССИВ с данными из базы данных который содержит объекты
   //todo lesson 59-60 заменяем данный карточек menuCard на данные которые будут подхватываться из db.json 16,25 min
   // ? 1 выносим функционал общения с сервером в отдельную функцию(ВСЕГДА РЕКОМЕНДУЕТСЯ) POST в db.jso
 
@@ -2834,42 +2845,59 @@ window.addEventListener('DOMContentLoaded', () => {
       prevModalDialog.classList.remove('hide');
       closeModal();
     }, 4000);
-  } //TODO lesson 61 
+  } //TODO lesson 61 slider #1
 
-  /*     const slides = document.querySelectorAll('.offer__slide'),
-          prev = document.querySelector('.offer__slider-prev'),
-          next = document.querySelector('.offer__slider-next');
-  
-      let slideIndex = 1; //индекс который определяет текущее положение в слайдере (let потомучто будет изменяться)
-  
-      showSlides(slideIndex); //! что бы все заработало не зыбываем про инициализацию
-  
-      function showSlides(n) {
-          if (n > slides.length) { // если ушли в правую границу то, 
-              slideIndex = 1; //при клике возвращаемся к первому слайду
-          }
-          if (n < 1) { // если в отрицательную сторону то, 
-              slideIndex = slides.length; // возвращаем к последнему имеющемуся
-          }
-  
-          slides.forEach(item => item.style.display = 'none'); //скрываем все слайды
-  
-          slides[slideIndex - 1].item.style.display = 'block'; // показываем нужный
-  
-      }
-      //* функционал по изменению индекса слайда при их перелистывании 
-      function pulusSlides(n) {
-          showSlides(slideIndex += n)
-      }
-  
-      prev.addEventListener('click', () => {
-          pulusSlides(-1);
-      });
-  
-      next.addEventListener('click', () => {
-          pulusSlides(+1);
-      }); */
 
+  const slides = document.querySelectorAll('.offer__slide'),
+        prev = document.querySelector('.offer__slider-prev'),
+        next = document.querySelector('.offer__slider-next'),
+        total = document.querySelector('#total'),
+        current = document.querySelector('#current');
+  let slideIndex = 1; //индекс который определяет текущее положение в слайдере (let потомучто будет изменяться)
+
+  showSlides(slideIndex); //! что бы все заработало не зыбываем про инициализацию
+
+  if (slides.length < 10) {
+    total.textContent = `0${slides.length}`;
+  } else {
+    total.textContent = slides.length;
+  }
+
+  function showSlides(n) {
+    if (n > slides.length) {
+      // если ушли в правую границу то, 
+      slideIndex = 1; //при клике возвращаемся к первому слайду
+    }
+
+    if (n < 1) {
+      // если в отрицательную сторону то, 
+      slideIndex = slides.length; // возвращаем к последнему имеющемуся
+    } //!! можно сделать с использованием классов
+
+
+    slides.forEach(item => item.style.display = 'none'); //скрываем все слайды
+
+    slides[slideIndex - 1].style.display = 'block'; // показываем нужный
+    // текущий слайд н/п
+
+    if (slides.length < 10) {
+      current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
+    }
+  } //* функционал по изменению индекса слайда при их перелистывании 
+
+
+  function pulusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+
+  prev.addEventListener('click', () => {
+    pulusSlides(-1);
+  });
+  next.addEventListener('click', () => {
+    pulusSlides(1);
+  });
 });
 
 /***/ })
