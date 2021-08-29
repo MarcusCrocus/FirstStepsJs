@@ -281,9 +281,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //todo lesson 59 настройка GET
 
+    const GetResource = async (url) => {
+        const res = await fetch(url);
+                        //! если Fetch сталкивается с ошибкой в http запроссе( 404 500 502 и тд) = он не выдаст catch(redject) - ошибкой для него является отсутствие интернета или критические неполадки в самом запроссе
+        if(!res.ok) { //! обрабатываем такое поведение
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+        } 
+        return await res.json(); //возвращаем Promise что бы обработать через цепочку then
 
+    };
 
-    new MenuCard(
+/*     new MenuCard(
         "img/tabs/vegy.jpg",
         "vegy",
         'Меню "Фитнес" ',
@@ -312,7 +320,42 @@ window.addEventListener('DOMContentLoaded', () => {
         '.menu .container',
         'menu__item',
         'big'
-    ).render();
+    ).render(); */
+
+    //todo lesson 59 настройка GET
+    //? избавляемся от карточек
+
+    GetResource('http://localhost:3000/menu')
+        .then(data => {
+            //? деструктуризация через перебор для создания списка
+            data.forEach(({img, altimg, title, descr, price}) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+            });
+        });
+
+        // Вариант 2 лишенный шаблонизации(создание верстки на лету без использования классов)
+        /* getResources('http://localhost:3000/menu')
+            .then(data => createCard(data));
+        
+        function createCard(data) {
+            data.forEach(({img, altimg,title, descr, price}) => {
+                const element = document.createElement('div');
+    
+                element.classList.add('menu__item');
+        
+                element.innerHTML = `
+                <img src=${img} alt=${altimg}>
+                <h3 class="menu__item-subtitle">${title}</h3>
+                <div class="menu__item-descr">${descr}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${price}</span> грн/день</div>
+                </div>
+            `;
+
+            document.querySelector('.menu. container').append(element);
+        }     */
 
     // todo lesson 53 Forms при помощи XMLHttprequest (устаревший метод) два метода отправки FormData and JSON
 
@@ -699,16 +742,16 @@ window.addEventListener('DOMContentLoaded', () => {
    // todo lesson 58 adding db.json file
      //? получим доступ к базе данных
 
-   fetch('db.json')
+/*    fetch('db.json')         //! для визуального сравнения либо это либо это в dev.tools
         .then(data => data.json())
-        .then(res => console.log(res));
+        .then(res => console.log(res)); */
 
    //? в консоле должен появиться ОБЪЕКТ с данными из базы данных
    //? запускаем json-server для того что бы иметь возможность POST дата в базу данных (request)*/
 
    //!!  npx json-server db.json - необходимо что бы json сервер и openserver оба работали  */ 
     fetch('http://localhost:3000/menu')
-        .then(data => data.json())
+        .then(data => data.json())                        //! для визуального сравнения либо это либо это в dev.tools подвязываем open server для пост запроссов
         .then(res => console.log(res));
     //? в консоле должен появиться МАССИВ с данными из базы данных который содержит объекты
 
@@ -758,7 +801,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
            //? трансформация formData в массив-массивом потом в объект, а потом в json
            
-              const json = JSON.stringify(Object.fromEntries(formData.entries())); //! не работает вместе
+              const json = JSON.stringify(Object.fromEntries(formData.entries())); //! не работает вместе npm i core-js --save-dev(помогло)
 
              //? пример как работает Object.entries 
 /*                 const obj = {a: 23, b: 44};
@@ -769,7 +812,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     object[key] = value;
                 }); */ 
             
-            postData('http://localhost:3000/requests', json) //! не работает вместе
+            postData('http://localhost:3000/requests', json) //! не работает вместе npm i core-js --save-dev (помогло)
                 //postData('http://localhost:3000/requests', JSON.stringify(object))
                 .then(data => {
                     console.log(data); // данные из промиса которые вернул сервер
